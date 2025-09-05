@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CustomCategory } from "../types";
+
 import CategoryDropdown from "./category-dropdown";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ListFilter } from "lucide-react";
 import CategoriesSidebar from "./categories-sidebar";
+import { CatagoriesGetManyOutput } from "@/modules/categories/types";
 
-const Categories = ({ data }: { data: CustomCategory[] }) => {
+const Categories = ({ data }: { data: CatagoriesGetManyOutput }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
   const viewAllRef = useRef<HTMLDivElement>(null);
@@ -60,11 +61,7 @@ const Categories = ({ data }: { data: CustomCategory[] }) => {
 
   return (
     <div className="relative w-full">
-      <CategoriesSidebar
-        open={isSidebarOpen}
-        onOpenChange={setIsSidebarOpen}
-        data={data}
-      />
+      <CategoriesSidebar open={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
 
       <div
         ref={measureRef}

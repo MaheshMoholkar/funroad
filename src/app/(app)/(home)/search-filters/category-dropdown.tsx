@@ -5,15 +5,15 @@ import { cn } from "@/lib/utils";
 import React, { useRef, useState } from "react";
 import { useDropdownPosition } from "./use-dropdown-position";
 import SubcategoryMenu from "./subcategory-menu";
-import { CustomCategory } from "../types";
 import Link from "next/link";
+import { CatagoriesGetSingleOutput } from "@/modules/categories/types";
 
 const CategoryDropdown = ({
   category,
   isActive,
   isNavigationHovered,
 }: {
-  category: CustomCategory;
+  category: CatagoriesGetSingleOutput;
   isActive?: boolean;
   isNavigationHovered?: boolean;
 }) => {

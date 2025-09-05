@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CustomCategory } from "../types";
+
 import {
   Sheet,
   SheetContent,
@@ -9,24 +9,34 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTRPC } from "@/trpc/client";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  CatagoriesGetManyOutput,
+  CatagoriesGetSingleOutput,
+} from "@/modules/categories/types";
 
 const CategoriesSidebar = ({
   open,
   onOpenChange,
-  data,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  data: CustomCategory[];
 }) => {
-  const router = useRouter();
-  const [parentCategories, setParentCategories] = useState<
-    CustomCategory[] | null
-  >(null);
-  const [selectedCategory, setSelectedCategory] =
-    useState<CustomCategory | null>(null);
+  const trpc = useTRPC();
 
-  const currentCategories = parentCategories ?? data ?? [];
+  const { data: categories } = useSuspenseQuery(
+    trpc.categories.getMany.queryOptions()
+  );
+
+  const router = useRouter();
+
+  const [parentCategories, setParentCategories] =
+    useState<CatagoriesGetManyOutput | null>(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<CatagoriesGetSingleOutput | null>(null);
+
+  const currentCategories = parentCategories ?? categories ?? [];
 
   const handleOpenChange = (open: boolean) => {
     setSelectedCategory(null);
@@ -34,9 +44,9 @@ const CategoriesSidebar = ({
     onOpenChange(open);
   };
 
-  const handleCategoryClick = (category: CustomCategory) => {
+  const handleCategoryClick = (category: CatagoriesGetSingleOutput) => {
     if (category.subcategories && category.subcategories.length > 0) {
-      setParentCategories(category.subcategories as CustomCategory[]);
+      setParentCategories(category.subcategories as CatagoriesGetManyOutput);
       setSelectedCategory(category);
     } else {
       if (parentCategories && selectedCategory) {

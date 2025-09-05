@@ -1,13 +1,13 @@
 import Link from "next/link";
 import React from "react";
-import { CustomCategory } from "../types";
+import { CatagoriesGetSingleOutput } from "@/modules/categories/types";
 
 const SubcategoryMenu = ({
   category,
   isOpen,
   position,
 }: {
-  category: CustomCategory;
+  category: CatagoriesGetSingleOutput;
   isOpen: boolean;
   position: { top: number; left: number };
 }) => {

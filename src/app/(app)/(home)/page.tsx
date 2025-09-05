@@ -1,3 +1,3 @@
-export default async function Home() {
-  return <div className="flex flex-col gap-y-6"></div>;
+export default function Home() {
+  return <div className="flex flex-col gap-y-6">Home</div>;
 }
