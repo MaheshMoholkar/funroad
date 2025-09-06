@@ -1,3 +1,12 @@
+"use client";
+
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
+
 export default function Home() {
-  return <div className="flex flex-col gap-y-6">Home</div>;
+  const trpc = useTRPC();
+  const { data } = useQuery(trpc.auth.session.queryOptions());
+  return (
+    <div className="flex flex-col gap-y-6">{JSON.stringify(data?.user)}</div>
+  );
 }
