@@ -8,8 +8,10 @@ import { cn } from "@/lib/utils";
 import { ListFilter } from "lucide-react";
 import CategoriesSidebar from "./categories-sidebar";
 import { CatagoriesGetManyOutput } from "@/modules/categories/types";
+import { useParams } from "next/navigation";
 
 const Categories = ({ data }: { data: CatagoriesGetManyOutput }) => {
+  const params = useParams();
   const containerRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
   const viewAllRef = useRef<HTMLDivElement>(null);
@@ -18,7 +20,8 @@ const Categories = ({ data }: { data: CatagoriesGetManyOutput }) => {
   const [isAnyHovered, setIsAnyHovered] = useState<boolean>(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
-  const activeCategory = "all";
+  const categoryParam = params.category;
+  const activeCategory = categoryParam || "all";
 
   const activeCategoryIndex = data.findIndex(
     (category) => category.slug === activeCategory
@@ -106,6 +109,7 @@ const Categories = ({ data }: { data: CatagoriesGetManyOutput }) => {
                 !isAnyHovered &&
                 "bg-white border-primary"
             )}
+            variant="elevated"
             onClick={() => setIsSidebarOpen(true)}
           >
             View All
