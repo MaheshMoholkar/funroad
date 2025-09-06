@@ -1,12 +1,60 @@
+import { Category } from "@/payload-types";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { Where } from "payload";
+import z from "zod";
 
 export const productsRouter = createTRPCRouter({
-  getMany: baseProcedure.query(async ({ ctx }) => {
-    const data = await ctx.db.find({
-      collection: "products",
-      depth: 1, // Populate "category" & "image"
-    });
+  getMany: baseProcedure
+    .input(
+      z.object({
+        category: z.string().nullable().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const where: Where = {};
 
-    return data;
-  }),
+      if (input.category) {
+        const categories = await ctx.db.find({
+          collection: "categories",
+          limit: 1,
+          depth: 1, // Populate "subcategories"
+          pagination: false,
+          where: {
+            slug: {
+              equals: input.category,
+            },
+          },
+        });
+
+        const formattedData = categories.docs.map((doc) => ({
+          ...doc,
+          subcategories: (doc.subcategories?.docs ?? []).map((doc) => ({
+            ...(doc as Category),
+          })),
+        }));
+
+        const subcategoriesSlugs = [];
+        const parentCategory = formattedData[0];
+
+        if (parentCategory) {
+          subcategoriesSlugs.push(
+            ...(parentCategory.subcategories?.map(
+              (subcategory) => subcategory.slug
+            ) ?? [])
+          );
+        }
+
+        where["category.slug"] = {
+          in: [parentCategory.slug, ...subcategoriesSlugs],
+        };
+      }
+
+      const data = await ctx.db.find({
+        collection: "products",
+        depth: 1, // Populate "category" & "image"
+        where,
+      });
+
+      return data;
+    }),
 });

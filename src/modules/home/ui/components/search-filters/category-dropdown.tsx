@@ -35,12 +35,13 @@ const CategoryDropdown = ({
       ref={dropdownRef}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      draggable={false}
     >
       <div className="relative">
         <Button
           variant="elevated"
           className={cn(
-            "h-11 px-4 bg-transparent border-transparent rounded-full hover:bg-white hover:border-primary text-black",
+            "h-11 px-4 bg-transparent border-transparent rounded-full hover:bg-white hover:border-primary text-black select-none",
             isActive && !isNavigationHovered && "bg-white border-primary",
             open &&
               "bg-white border-primary shadow-[4px_4px_0px_0px_rgba(0,0,0.1)] -translate-x-[4px] -translate-y-[4px] transition-all"
