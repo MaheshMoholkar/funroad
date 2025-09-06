@@ -7,6 +7,8 @@ export default function Home() {
   const trpc = useTRPC();
   const { data } = useQuery(trpc.auth.session.queryOptions());
   return (
-    <div className="flex flex-col gap-y-6">{JSON.stringify(data?.user)}</div>
+    <div className="flex flex-col gap-y-6">
+      {JSON.stringify(data?.user?.username)}
+    </div>
   );
 }
