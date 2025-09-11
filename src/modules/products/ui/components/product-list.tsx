@@ -2,7 +2,7 @@
 
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useProductFilters } from "../hooks/use-product-filters";
+import { useProductFilters } from "../../hooks/use-product-filters";
 
 export const ProductList = ({ category }: { category?: string }) => {
   const [filters] = useProductFilters();

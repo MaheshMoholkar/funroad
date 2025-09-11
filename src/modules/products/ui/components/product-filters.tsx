@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import React, { useState } from "react";
 import { PriceFilter } from "./price-filter";
-import { useProductFilters } from "../hooks/use-product-filters";
+import { useProductFilters } from "../../hooks/use-product-filters";
 import { TagsFilter } from "./tags-filter";
 
 interface ProductFiltersProps {
@@ -35,7 +35,13 @@ const ProductFilter = ({ title, className, children }: ProductFiltersProps) => {
 const ProductFilters = () => {
   const [filters, setFilters] = useProductFilters();
 
-  const hasAnyFilters = Object.entries(filters).some(([, value]) => {
+  const hasAnyFilters = Object.entries(filters).some(([key, value]) => {
+    if (key === "sort") return false;
+
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
+
     if (typeof value === "string") {
       return value !== "";
     }
