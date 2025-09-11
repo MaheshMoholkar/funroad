@@ -5,21 +5,23 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import ProductFilters from "@/modules/products/ui/components/product-filters";
 import ProductSort from "@/modules/products/ui/components/product-sort";
+import { SearchParams } from "nuqs/server";
+import { loadProductFilters } from "@/modules/products/search-params";
 
 const Page = async ({
   params,
   searchParams,
 }: {
   params: Promise<{ category: string }>;
-  searchParams: Promise<{ minPrice: string; maxPrice: string }>;
+  searchParams: Promise<SearchParams>;
 }) => {
   const { category } = await params;
-  const { minPrice, maxPrice } = await searchParams;
+  const filters = await loadProductFilters(searchParams);
 
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery(
-    trpc.products.getMany.queryOptions({ category, minPrice, maxPrice })
+    trpc.products.getMany.queryOptions({ category, ...filters })
   );
 
   return (

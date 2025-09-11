@@ -5,7 +5,7 @@ import {
   parseAsStringLiteral,
 } from "nuqs/server";
 
-const sortValues = ["curated", "trending", "hot_and_new"];
+export const sortValues = ["curated", "trending", "hot_and_new"];
 
 const params = {
   sort: parseAsStringLiteral(sortValues).withDefault("curated"),
