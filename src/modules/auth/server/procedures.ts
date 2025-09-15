@@ -32,9 +32,28 @@ export const authRouter = createTRPCRouter({
           message: "Username already taken!",
         });
 
+      const tenant = await ctx.db.create({
+        collection: "tenants",
+        data: {
+          name: input.username,
+          slug: input.username,
+          paymentId: "test",
+          upi_id: "test",
+        },
+      });
+
       await ctx.db.create({
         collection: "users",
-        data: { email, username, password },
+        data: {
+          email,
+          username,
+          password,
+          tenants: [
+            {
+              tenant: tenant.id,
+            },
+          ],
+        },
       });
 
       const user = await ctx.db.login({
