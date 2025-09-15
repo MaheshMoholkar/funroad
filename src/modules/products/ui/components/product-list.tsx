@@ -8,7 +8,13 @@ import { DEFAULT_LIMIT } from "@/constants";
 import { Button } from "@/components/ui/button";
 import { InboxIcon } from "lucide-react";
 
-export const ProductList = ({ category }: { category?: string }) => {
+export const ProductList = ({
+  category,
+  tenantSlug,
+}: {
+  category?: string;
+  tenantSlug?: string;
+}) => {
   const [filters] = useProductFilters();
 
   const trpc = useTRPC();
@@ -23,6 +29,7 @@ export const ProductList = ({ category }: { category?: string }) => {
       {
         ...filters,
         category: category,
+        tenantSlug: tenantSlug,
         limit: DEFAULT_LIMIT,
       },
       {
@@ -53,8 +60,8 @@ export const ProductList = ({ category }: { category?: string }) => {
               id={product.id}
               name={product.name}
               imageUrl={product.image?.url}
-              authorUsername={"mahesh"}
-              authorImageUrl={""}
+              authorUsername={product.tenant?.name}
+              authorImageUrl={product.tenant?.image?.url}
               price={product.price}
               reviewCount={5}
               reviewRating={3}
